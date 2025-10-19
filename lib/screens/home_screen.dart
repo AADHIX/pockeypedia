@@ -20,8 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.yellow[300],
       appBar: AppBar(
         title: const Text(
           'Pokédex',
@@ -38,85 +43,41 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
         child: Column(
           children: [
-            // Header Section
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue[700]!, Colors.red[600]!],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Pokémon Go Pokédex',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 4,
-                          color: Colors.black.withOpacity(0.3),
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Discover all ${pokemonList.length} Pokémon',
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
+            // REMOVED: Entire Header Section Container
 
             // Load Button
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(bottom: screenHeight * 0.02),
               child: ElevatedButton(
                 onPressed: isLoading ? null : fetchData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red[600],
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
                   ),
                   elevation: 4,
                 ),
                 child: isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
+                    ? SizedBox(
+                        height: screenHeight * 0.025,
+                        width: screenHeight * 0.025,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
+                          valueColor: const AlwaysStoppedAnimation<Color>(
                             Colors.white,
                           ),
                         ),
                       )
-                    : const Text(
+                    : Text(
                         'Load Pokémon',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: screenWidth * 0.045,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -132,25 +93,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildContent() {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     if (hasError) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-            const SizedBox(height: 16),
+            Icon(
+              Icons.error_outline,
+              size: screenWidth * 0.15,
+              color: Colors.red[300],
+            ),
+            SizedBox(height: screenHeight * 0.02),
             Text(
               'Failed to load Pokémon data',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                color: Colors.grey[600],
+              ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01),
             ElevatedButton(
               onPressed: fetchData,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red[600],
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Try Again'),
+              child: Text(
+                'Try Again',
+                style: TextStyle(fontSize: screenWidth * 0.035),
+              ),
             ),
           ],
         ),
@@ -162,16 +138,26 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.catching_pokemon, size: 80, color: Colors.grey[400]),
-            const SizedBox(height: 16),
+            Icon(
+              Icons.catching_pokemon,
+              size: screenWidth * 0.2,
+              color: Colors.grey[400],
+            ),
+            SizedBox(height: screenHeight * 0.02),
             Text(
               'No Pokémon loaded yet',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                color: Colors.grey[600],
+              ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01),
             Text(
               'Tap the button above to load Pokémon',
-              style: TextStyle(color: Colors.grey[500]),
+              style: TextStyle(
+                color: Colors.grey[500],
+                fontSize: screenWidth * 0.035,
+              ),
             ),
           ],
         ),
@@ -179,30 +165,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (isLoading) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
               strokeWidth: 3,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02),
             Text(
               'Loading Pokémon...',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(
+                fontSize: screenWidth * 0.04,
+                color: Colors.grey,
+              ),
             ),
           ],
         ),
       );
     }
 
+    // Responsive grid based on screen size
+    final int crossAxisCount = screenWidth > 600 ? 3 : 2;
+    final double childAspectRatio = screenWidth > 600 ? 1.2 : 1.4;
+
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // 3 columns
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 0.8, // Adjust card aspect ratio
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: screenWidth * 0.03,
+        mainAxisSpacing: screenWidth * 0.03,
+        childAspectRatio: childAspectRatio,
       ),
       itemCount: pokemonList.length,
       itemBuilder: (context, index) {
@@ -213,12 +206,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPokemonCard(Map<String, dynamic> pokemon) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+      ),
       child: InkWell(
         onTap: () {
-          // Navigate to Pokemon Detail Screen when tapped
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -226,109 +223,160 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blue[50]!, Colors.red[50]!],
+        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+        child: Stack(
+          children: [
+            // Background Gradient
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.blue[100]!, Colors.red[100]!],
+                ),
+                borderRadius: BorderRadius.circular(screenWidth * 0.04),
+              ),
             ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Pokémon ID
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
+
+            // Pokémon ID Badge (Top Left)
+            Positioned(
+              top: screenHeight * 0.01,
+              left: screenWidth * 0.02,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.02,
+                  vertical: screenHeight * 0.005,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                ),
+                child: Text(
+                  '#${pokemon['id']?.toString().padLeft(3, '0') ?? '000'}',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.red[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '#${pokemon['id']?.toString() ?? 'N/A'}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red[800],
+                ),
+              ),
+            ),
+
+            // Pokémon Image (Center) - MODIFIED: Removed circle container
+            Positioned(
+              top: screenHeight * 0.03,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  child: Container(
+                    width: screenWidth * 0.2,
+                    height: screenWidth * 0.2,
+                    child: Image.network(
+                      pokemon['img']?.toString() ?? '',
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                : null,
+                            strokeWidth: 2,
+                            color: Colors.red[400],
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.catching_pokemon,
+                          size: screenWidth * 0.1,
+                          color: Colors.red[400],
+                        );
+                      },
                     ),
                   ),
                 ),
+              ),
+            ),
 
-                // Pokémon Image (placeholder - you can replace with actual images)
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey[300]!, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.catching_pokemon,
-                    size: 40,
-                    color: Colors.red[400],
-                  ),
+            // Pokémon Name (Bottom)
+            Positioned(
+              bottom: screenHeight * 0.05,
+              left: screenWidth * 0.02,
+              right: screenWidth * 0.02,
+              child: Text(
+                pokemon['name']?.toString() ?? 'Unknown',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
 
-                // Pokémon Name
-                Text(
-                  pokemon['name']?.toString() ?? 'Unknown',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                // Pokémon Types
-                Wrap(
-                  spacing: 4,
-                  children:
-                      (pokemon['type'] as List<dynamic>?)
-                          ?.take(2) // Show max 2 types
-                          .map(
-                            (type) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
+            // Pokémon Types (Bottom)
+            Positioned(
+              bottom: screenHeight * 0.01,
+              left: screenWidth * 0.02,
+              right: screenWidth * 0.02,
+              child: Wrap(
+                spacing: screenWidth * 0.015,
+                alignment: WrapAlignment.center,
+                children:
+                    (pokemon['type'] as List<dynamic>?)
+                        ?.map(
+                          (type) => Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.02,
+                              vertical: screenHeight * 0.005,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _getTypeColor(type.toString()),
+                              borderRadius: BorderRadius.circular(
+                                screenWidth * 0.03,
                               ),
-                              decoration: BoxDecoration(
-                                color: _getTypeColor(type.toString()),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                type.toString(),
-                                style: const TextStyle(
-                                  fontSize: 8,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
+                              ],
+                            ),
+                            child: Text(
+                              type.toString(),
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.025,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
-                          .toList() ??
-                      [],
-                ),
-              ],
+                          ),
+                        )
+                        .toList() ??
+                    [],
+              ),
             ),
-          ),
+
+            // Decorative Elements
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Opacity(
+                opacity: 0.1,
+                child: Icon(
+                  Icons.catching_pokemon,
+                  size: screenWidth * 0.15,
+                  color: Colors.yellow[400],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -336,24 +384,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Color _getTypeColor(String type) {
     final typeColors = {
-      'Normal': Colors.grey[400]!,
-      'Fire': Colors.orange[600]!,
-      'Water': Colors.blue[400]!,
-      'Electric': Colors.yellow[600]!,
-      'Grass': Colors.green[400]!,
-      'Ice': Colors.cyan[300]!,
-      'Fighting': Colors.red[700]!,
-      'Poison': Colors.purple[400]!,
-      'Ground': Colors.orange[300]!,
-      'Flying': Colors.indigo[300]!,
-      'Psychic': Colors.pink[400]!,
-      'Bug': Colors.lightGreen[500]!,
-      'Rock': Colors.brown[400]!,
-      'Ghost': Colors.deepPurple[400]!,
-      'Dragon': Colors.indigo[600]!,
-      'Dark': Colors.brown[700]!,
-      'Steel': Colors.blueGrey[400]!,
-      'Fairy': Colors.pink[200]!,
+      'Normal': Colors.grey[400],
+      'Fire': Colors.orange[600],
+      'Water': Colors.blue[400],
+      'Electric': Colors.yellow[600],
+      'Grass': Colors.green[400],
+      'Ice': Colors.cyan[300],
+      'Fighting': Colors.red[700],
+      'Poison': Colors.purple[400],
+      'Ground': Colors.orange[300],
+      'Flying': Colors.indigo[300],
+      'Psychic': Colors.pink[400],
+      'Bug': Colors.lightGreen[500],
+      'Rock': Colors.brown[400],
+      'Ghost': Colors.deepPurple[400],
+      'Dragon': Colors.indigo[600],
+      'Dark': Colors.brown[700],
+      'Steel': Colors.blueGrey[400],
+      'Fairy': Colors.pink[200],
     };
     return typeColors[type] ?? Colors.grey;
   }
@@ -371,7 +419,6 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
-        // Proper JSON decoding
         var decodeData = jsonDecode(response.body);
         print(decodeData); // This will print the decoded JSON data
 
