@@ -24,6 +24,8 @@ dependencies:
   firebase_auth: ^6.1.1
   firebase_core: ^4.2.0
   fluttertoast: ^9.0.0
+  http: ^1.5.0
+  cached_network_image: ^3.4.1
 
 
 dev_dependencies:
