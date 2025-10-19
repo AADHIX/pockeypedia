@@ -1,7 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pockey_mon/screens/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -64,3 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+/// flutter clean
+/// flutter pub get
+/// cd android
+///  ./gradlew clean
+///cd ..
+///flutter run

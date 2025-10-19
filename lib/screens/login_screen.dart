@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pockey_mon/screens/registration_screen.dart';
 import 'package:pockey_mon/widgets/button.dart';
+
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -128,20 +133,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       suffixIcon: ValueListenableBuilder(
                         valueListenable: passwordController,
                         builder: (context, value, child) {
-                          return value.text.isEmpty
-                              ? const SizedBox.shrink()
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      obscureText = !obscureText;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                );
+                          if (value.text.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return IconButton(
+                            onPressed: () {
+                              setState(() {
+                                obscureText = !obscureText;
+                              });
+                            },
+                            icon: Icon(
+                              obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -160,12 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: LoadingAnimatedButton(
-                    onTap: () {
-                      if (formkey.currentState!.validate()) {
-                        // Handle login logic here
-                        print('Login successful');
-                      }
-                    },
+                    isLoading: isLoading,
+                    onTap: validateAndLogin,
                     child: const Text(
                       "Login",
                       style: TextStyle(
@@ -188,11 +190,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => RegistrationScreen(),
+                            builder: (_) => const RegistrationScreen(),
                           ),
                         );
                       },
-
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
@@ -212,5 +213,122 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void validateAndLogin() {
+    // Validate form first
+    if (!formkey.currentState!.validate()) {
+      Fluttertoast.showToast(
+        msg: 'Please fix the errors above',
+        backgroundColor: Colors.orange,
+      );
+      return;
+    }
+
+    loginUser();
+  }
+
+  Future<void> loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Extract and trim values
+      final String email = emailController.text.trim();
+      final String password = passwordController.text.trim();
+
+      // Additional validation (though form should have already validated)
+      if (email.isEmpty || password.isEmpty) {
+        Fluttertoast.showToast(
+          msg: 'Email and password are required',
+          backgroundColor: Colors.red,
+        );
+        return;
+      }
+
+      // Email format validation
+      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+      if (!emailRegex.hasMatch(email)) {
+        Fluttertoast.showToast(
+          msg: 'Please enter a valid email address',
+          backgroundColor: Colors.red,
+        );
+        return;
+      }
+
+      // Password length validation
+      if (password.length < 6) {
+        Fluttertoast.showToast(
+          msg: 'Password must be at least 6 characters',
+          backgroundColor: Colors.red,
+        );
+        return;
+      }
+
+      // Sign in with Firebase
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      // Success - navigate to home screen
+      if (userCredential.user != null) {
+        if (mounted) {
+          Fluttertoast.showToast(
+            msg: 'Login successful!',
+            backgroundColor: Colors.green,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase auth errors
+      String errorMessage = 'Login failed. Please try again.';
+
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found with this email.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Incorrect password. Please try again.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Invalid email address.';
+          break;
+        case 'user-disabled':
+          errorMessage = 'This account has been disabled.';
+          break;
+        case 'too-many-requests':
+          errorMessage = 'Too many attempts. Please try again later.';
+          break;
+        case 'network-request-failed':
+          errorMessage = 'Network error. Please check your connection.';
+          break;
+        default:
+          errorMessage = e.message ?? 'An error occurred during login.';
+      }
+
+      Fluttertoast.showToast(
+        msg: errorMessage,
+        backgroundColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } catch (e) {
+      // Handle other errors
+      Fluttertoast.showToast(
+        msg: 'An unexpected error occurred. Please try again.',
+        backgroundColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } finally {
+      // Always set loading to false when done
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }

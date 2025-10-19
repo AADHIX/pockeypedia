@@ -20,6 +20,12 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   lottie: ^3.3.2
+  cloud_firestore: ^6.0.3
+  firebase_auth: ^6.1.1
+  firebase_core: ^4.2.0
+  fluttertoast: ^9.0.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
