@@ -5,6 +5,8 @@ A new Flutter project.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
+<img width="1024" height="1024" alt="poke2" src="https://github.com/user-attachments/assets/ac225b76-4183-4809-9c5b-aacd681538ee" />
+
 
 A few resources to get you started if this is your first Flutter project:
 
