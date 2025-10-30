@@ -158,9 +158,9 @@ For bug reports and feature requests, please visit our [Issues page](https://git
 
 ## Contact & Support
 
-**Developer**: AADHIX
+**Developer**: ADARSH AJAY 
 - **GitHub**: [@AADHIX](https://github.com/AADHIX)
-- **Email**: your.email@example.com
+- **Email**: aadhiadarsh192001@gmail.com
 - **Project Link**: [https://github.com/AADHIX/pockeypedia](https://github.com/AADHIX/pockeypedia)
 
 ### Getting Help:
