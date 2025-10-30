@@ -69,6 +69,12 @@ The code is organized into `screens`, `widgets`, and `tests` directories followi
 
 ## Screenshots
 
+
+https://github.com/user-attachments/assets/f35afd2b-3ffe-41a4-b15e-c09580513abc
+
+
+
+
 * <img width="704" height="1472" alt="poke3" src="https://github.com/user-attachments/assets/bf9445e7-524d-4cad-8c41-975de93f547a" />
 
   <img width="1440" height="3040" alt="Screenshot_20251018_211830" src="https://github.com/user-attachments/assets/3c626c3c-a2d9-4b48-984d-02b1fe541145" />
