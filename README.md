@@ -4,7 +4,7 @@
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?logo=flutter) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black)
 
-<img width="1024" height="1024" alt="poke2" src="https://github.com/user-attachments/assets/ac225b76-4183-4809-9c5b-aacd681538ee" />
+
 
 ## Objective
 
@@ -69,7 +69,12 @@ The code is organized into `screens`, `widgets`, and `tests` directories followi
 
 ## Screenshots
 
-*See /screenshots for demo images.*
+* <img width="704" height="1472" alt="poke3" src="https://github.com/user-attachments/assets/bf9445e7-524d-4cad-8c41-975de93f547a" />
+
+  <img width="1440" height="3040" alt="Screenshot_20251018_211830" src="https://github.com/user-attachments/assets/3c626c3c-a2d9-4b48-984d-02b1fe541145" />
+
+  <img width="1440" height="3040" alt="Screenshot_20251018_211805" src="https://github.com/user-attachments/assets/80b22c8f-a55b-4204-a023-8ca5bcea3043" />
+.*
 
 ## Getting Started
 
